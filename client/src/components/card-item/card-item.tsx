@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import type { DraggableProvided } from "@hello-pangea/dnd";
 
 import { type Card } from "../../common/types/types";
+import { CardEvent } from "../../common/enums/card-event.enum";
+import { SocketContext } from "../../context/socket";
 import { CopyButton } from "../primitives/copy-button";
 import { DeleteButton } from "../primitives/delete-button";
 import { Splitter } from "../primitives/styled/splitter";
@@ -17,6 +20,20 @@ type Props = {
 };
 
 export const CardItem = ({ card, isDragging, provided }: Props) => {
+  const socket = useContext(SocketContext);
+  const onEditCardDescription = (description: string) => {
+    socket.emit(CardEvent.CHANGE_DESCRIPTION, card.id, description)
+  };
+  const onDeleteCard = () => {
+    socket.emit(CardEvent.DELETE, card.id)
+  };
+  const onRenameCard = (name: string) => {
+    socket.emit(CardEvent.RENAME, card.id, name)
+  };
+  const onCloneCard = () => {
+    socket.emit(CardEvent.CLONE, card.id)
+  };
+
   return (
     <Container
       className="card-container"
@@ -29,12 +46,12 @@ export const CardItem = ({ card, isDragging, provided }: Props) => {
       aria-label={card.name}
     >
       <Content>
-        <Title onChange={() => {}} title={card.name} fontSize="large" isBold />
-        <Text text={card.description} onChange={() => {}} />
+        <Title onChange={onRenameCard} title={card.name} fontSize="large" isBold />
+        <Text text={card.description} onChange={onEditCardDescription} />
         <Footer>
-          <DeleteButton onClick={() => {}} />
+          <DeleteButton onClick={onDeleteCard} />
           <Splitter />
-          <CopyButton onClick={() => {}} />
+          <CopyButton onClick={onCloneCard} />
         </Footer>
       </Content>
     </Container>
