@@ -8,6 +8,10 @@ class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(CardEvent.CREATE, this.createCard.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
+    socket.on(CardEvent.CHANGE_DESCRIPTION, this.changeCardDescription.bind(this));
+    socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
+    socket.on(CardEvent.RENAME, this.renameCard.bind(this));
+    socket.on(CardEvent.CLONE, this.cloneCard.bind(this));
   }
 
   public createCard(listId: string, cardName: string): void {
@@ -18,6 +22,56 @@ class CardHandler extends SocketHandler {
       list.id === listId ? list.setCards(list.cards.concat(newCard)) : list
     );
 
+    this.db.setData(updatedLists);
+    this.updateLists();
+  }
+
+  public cloneCard(cardId: string): void {
+    const lists = this.db.getData();
+    let cardToClone : Card;
+    lists.some(list => {
+      cardToClone = list.cards.find(card => card.id === cardId)
+      return cardToClone
+    })
+    const newCard = new Card(cardToClone.name, cardToClone.description)
+    const updatedLists = lists.map((list) => list.setCards(list.cards.concat(newCard)));
+    
+    this.db.setData(updatedLists);
+    this.updateLists();
+  }
+
+  public changeCardDescription(cardId: string, description: string): void {
+    const lists = this.db.getData();
+    const updatedLists = lists.map((list) =>
+      list.setCards(
+        list.cards.map((card) =>
+          card.id === cardId ? { ...card, description } : card
+        )
+      )
+    )
+    ;
+    this.db.setData(updatedLists);
+    this.updateLists();
+  }
+
+  public deleteCard(cardId: string): void {
+    const lists = this.db.getData();
+    const updatedLists = lists.map((list) =>
+      list.setCards(list.cards.filter((card) => card.id !== cardId))
+    );
+    this.db.setData(updatedLists);
+    this.updateLists();
+  }
+
+  public renameCard(cardId: string, name: string): void {
+    const lists = this.db.getData();
+    const updatedLists = lists.map((list) =>
+      list.setCards(
+        list.cards.map((card) =>
+          card.id === cardId ? { ...card, name } : card
+        )
+      )
+    );
     this.db.setData(updatedLists);
     this.updateLists();
   }
