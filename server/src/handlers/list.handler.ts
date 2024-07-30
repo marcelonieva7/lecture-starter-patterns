@@ -49,8 +49,7 @@ class ListHandler extends SocketHandler {
         return list;
       }
       return list;
-    }
-    );
+    });
     this.db.setData(updatedLists);
     this.updateLists();
   }

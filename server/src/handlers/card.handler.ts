@@ -8,7 +8,10 @@ class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(CardEvent.CREATE, this.createCard.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
-    socket.on(CardEvent.CHANGE_DESCRIPTION, this.changeCardDescription.bind(this));
+    socket.on(
+      CardEvent.CHANGE_DESCRIPTION,
+      this.changeCardDescription.bind(this)
+    );
     socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
     socket.on(CardEvent.RENAME, this.renameCard.bind(this));
     socket.on(CardEvent.CLONE, this.cloneCard.bind(this));
@@ -28,14 +31,16 @@ class CardHandler extends SocketHandler {
 
   public cloneCard(cardId: string): void {
     const lists = this.db.getData();
-    let cardToClone : Card;
-    lists.some(list => {
-      cardToClone = list.cards.find(card => card.id === cardId)
-      return cardToClone
-    })
-    const newCard = new Card(cardToClone.name, cardToClone.description)
-    const updatedLists = lists.map((list) => list.setCards(list.cards.concat(newCard)));
-    
+    let cardToClone: Card;
+    lists.some((list) => {
+      cardToClone = list.cards.find((card) => card.id === cardId);
+      return cardToClone;
+    });
+    const newCard = cardToClone.clone();
+    const updatedLists = lists.map((list) =>
+      list.setCards(list.cards.concat(newCard))
+    );
+
     this.db.setData(updatedLists);
     this.updateLists();
   }
@@ -44,12 +49,14 @@ class CardHandler extends SocketHandler {
     const lists = this.db.getData();
     const updatedLists = lists.map((list) =>
       list.setCards(
-        list.cards.map((card) =>
-          card.id === cardId ? { ...card, description } : card
-        )
+        list.cards.map((card) => {
+          if (card.id === cardId) {
+            card.description = description;
+          }
+          return card;
+        })
       )
-    )
-    ;
+    );
     this.db.setData(updatedLists);
     this.updateLists();
   }
@@ -67,9 +74,12 @@ class CardHandler extends SocketHandler {
     const lists = this.db.getData();
     const updatedLists = lists.map((list) =>
       list.setCards(
-        list.cards.map((card) =>
-          card.id === cardId ? { ...card, name } : card
-        )
+        list.cards.map((card) => {
+          if (card.id === cardId) {
+            card.name = name;
+          }
+          return card;
+        })
       )
     );
     this.db.setData(updatedLists);
