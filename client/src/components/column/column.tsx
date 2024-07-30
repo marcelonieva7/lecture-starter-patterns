@@ -27,13 +27,13 @@ type Props = {
 export const Column = ({ listId, listName, cards, index }: Props) => {
   const socket = useContext(SocketContext);
   const onCreateCard = (name: string) => {
-    socket.emit(CardEvent.CREATE, listId, name)
+    socket.emit(CardEvent.CREATE, listId, name);
   };
-  const onDeleteList = ():void => {
-    socket.emit(ListEvent.DELETE, listId)
-  }
+  const onDeleteList = (): void => {
+    socket.emit(ListEvent.DELETE, listId);
+  };
   const onRenameList = (newName: string) => {
-    socket.emit(ListEvent.RENAME, listId, newName)
+    socket.emit(ListEvent.RENAME, listId, newName);
   };
 
   return (

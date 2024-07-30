@@ -64,7 +64,7 @@ export const Workspace = () => {
     });
   };
   const onCreateList = (listName: string): void => {
-    socket.emit(ListEvent.CREATE, listName)
+    socket.emit(ListEvent.CREATE, listName);
   };
 
   return (

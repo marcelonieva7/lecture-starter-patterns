@@ -22,16 +22,16 @@ type Props = {
 export const CardItem = ({ card, isDragging, provided }: Props) => {
   const socket = useContext(SocketContext);
   const onEditCardDescription = (description: string) => {
-    socket.emit(CardEvent.CHANGE_DESCRIPTION, card.id, description)
+    socket.emit(CardEvent.CHANGE_DESCRIPTION, card.id, description);
   };
   const onDeleteCard = () => {
-    socket.emit(CardEvent.DELETE, card.id)
+    socket.emit(CardEvent.DELETE, card.id);
   };
   const onRenameCard = (name: string) => {
-    socket.emit(CardEvent.RENAME, card.id, name)
+    socket.emit(CardEvent.RENAME, card.id, name);
   };
   const onCloneCard = () => {
-    socket.emit(CardEvent.CLONE, card.id)
+    socket.emit(CardEvent.CLONE, card.id);
   };
 
   return (
@@ -46,7 +46,12 @@ export const CardItem = ({ card, isDragging, provided }: Props) => {
       aria-label={card.name}
     >
       <Content>
-        <Title onChange={onRenameCard} title={card.name} fontSize="large" isBold />
+        <Title
+          onChange={onRenameCard}
+          title={card.name}
+          fontSize="large"
+          isBold
+        />
         <Text text={card.description} onChange={onEditCardDescription} />
         <Footer>
           <DeleteButton onClick={onDeleteCard} />

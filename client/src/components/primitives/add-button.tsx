@@ -1,5 +1,5 @@
-import { Icon } from '../icon/icon';
-import { Button } from './styled/button';
+import { Icon } from "../icon/icon";
+import { Button } from "./styled/button";
 
 type Props = {
   onClick: () => void;
@@ -7,7 +7,7 @@ type Props = {
 
 const AddButton = ({ onClick }: Props) => {
   return (
-    <Button className="add-btn" onClick={onClick} color='transparent'>
+    <Button className="add-btn" onClick={onClick} color="transparent">
       <Icon iconName="add" />
     </Button>
   );

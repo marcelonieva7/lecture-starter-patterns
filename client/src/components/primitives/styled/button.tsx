@@ -1,4 +1,3 @@
-import { colors } from "@atlaskit/theme";
 import styled from "@emotion/styled";
 
 import { BORDER_RADIUS } from "../../../common/constants/constants";
