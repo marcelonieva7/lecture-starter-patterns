@@ -32,6 +32,9 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
   const onDeleteList = ():void => {
     socket.emit(ListEvent.DELETE, listId)
   }
+  const onRenameList = (newName: string) => {
+    socket.emit(ListEvent.RENAME, listId, newName)
+  };
 
   return (
     <Draggable draggableId={listId} index={index}>
@@ -49,7 +52,7 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
             <Title
               aria-label={listName}
               title={listName}
-              onChange={() => {}}
+              onChange={onRenameList}
               fontSize="large"
               width={200}
               isBold
