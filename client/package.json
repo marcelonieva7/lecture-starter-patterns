@@ -8,7 +8,11 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --check '**/*.{ts,tsx,js,jsx,json}'",
+    "format:fix": "prettier --write '**/*.{ts,tsx,js,jsx,json}'"
   },
   "dependencies": {
     "@atlaskit/theme": "12.2.8",
@@ -21,7 +25,14 @@
   "devDependencies": {
     "@types/react": "16.14.35",
     "@types/react-dom": "18.0.11",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
     "@vitejs/plugin-react": "3.1.0",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-react": "7.35.0",
+    "prettier": "3.2.5",
     "vite": "4.1.1",
     "vite-plugin-svgr": "4.2.0"
   }
