@@ -7,6 +7,7 @@ import { useContext } from "react";
 
 import { type Card } from "../../common/types/types";
 import { CardEvent } from "../../common/enums/card-event.enum";
+import { ListEvent } from "../../common/enums/list-event.enum";
 import { SocketContext } from "../../context/socket";
 import { CardsList } from "../card-list/card-list";
 import { DeleteButton } from "../primitives/delete-button";
@@ -28,6 +29,9 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
   const onCreateCard = (name: string) => {
     socket.emit(CardEvent.CREATE, listId, name)
   };
+  const onDeleteList = ():void => {
+    socket.emit(ListEvent.DELETE, listId)
+  }
 
   return (
     <Draggable draggableId={listId} index={index}>
@@ -51,7 +55,7 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
               isBold
             />
             <Splitter />
-            <DeleteButton color="#FFF0" onClick={() => {}} />
+            <DeleteButton color="#FFF0" onClick={onDeleteList} />
           </Header>
           <CardsList listId={listId} listType="CARD" cards={cards} />
           <Footer onCreateCard={onCreateCard} />
