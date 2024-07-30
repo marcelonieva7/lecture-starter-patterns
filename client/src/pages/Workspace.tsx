@@ -63,6 +63,9 @@ export const Workspace = () => {
       destinationIndex: destination.index,
     });
   };
+  const onCreateList = (listName: string): void => {
+    socket.emit(ListEvent.CREATE, listName)
+  };
 
   return (
     <React.Fragment>
@@ -84,7 +87,7 @@ export const Workspace = () => {
                 />
               ))}
               {provided.placeholder}
-              <ColumnCreator onCreateList={() => {}} />
+              <ColumnCreator onCreateList={onCreateList} />
             </Container>
           )}
         </Droppable>
