@@ -32,13 +32,16 @@ class CardHandler extends SocketHandler {
   public cloneCard(cardId: string): void {
     const lists = this.db.getData();
     let cardToClone: Card;
+    let listId: string;
+
     lists.some((list) => {
       cardToClone = list.cards.find((card) => card.id === cardId);
+      listId = list.id;
       return cardToClone;
     });
     const newCard = cardToClone.clone();
     const updatedLists = lists.map((list) =>
-      list.setCards(list.cards.concat(newCard))
+      list.id === listId ? list.setCards(list.cards.concat(newCard)) : list
     );
 
     this.db.setData(updatedLists);

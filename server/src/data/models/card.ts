@@ -16,8 +16,14 @@ class Card {
     this.id = randomUUID();
   }
 
-  public clone(): Card {
-    return new Card(this.name, this.description);
+  // PATTERN:{Prototype}
+  public clone(): this {
+    const clonedCard = <this>Object.create(this);
+    Object.assign(clonedCard, this);
+    clonedCard.createdAt = new Date();
+    clonedCard.id = randomUUID();
+
+    return clonedCard;
   }
 }
 
