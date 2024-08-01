@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io";
 
-import { ListEvent } from "../common/enums/enums";
+import { ListEvent, LogLevel } from "../common/enums/enums";
 import { List } from "../data/models/list";
 import { SocketHandler } from "./socket.handler";
 
@@ -18,40 +18,67 @@ class ListHandler extends SocketHandler {
   }
 
   private reorderLists(sourceIndex: number, destinationIndex: number): void {
-    const lists = this.db.getData();
-    const reorderedLists = this.reorderService.reorder(
-      lists,
-      sourceIndex,
-      destinationIndex
-    );
-    this.db.setData(reorderedLists);
-    this.updateLists();
+    try {
+      const lists = this.db.getData();
+      const reorderedLists = this.reorderService.reorder(
+        lists,
+        sourceIndex,
+        destinationIndex
+      );
+      this.db.setData(reorderedLists);
+      this.updateLists();
+
+      this.log(
+        LogLevel.INFO,
+        `List reordered: ${sourceIndex} to ${destinationIndex}`
+      );
+    } catch (error) {
+      this.log(LogLevel.ERROR, `Failed to reorder list: ${error}`);
+    }
   }
 
   private createList(name: string): void {
-    const lists = this.db.getData();
-    const newList = new List(name);
-    this.db.setData(lists.concat(newList));
-    this.updateLists();
+    try {
+      const lists = this.db.getData();
+      const newList = new List(name);
+      this.db.setData(lists.concat(newList));
+      this.updateLists();
+
+      this.log(LogLevel.INFO, `List created: ${name}`);
+    } catch (error) {
+      this.log(LogLevel.ERROR, `Failed to create list: ${error}`);
+    }
   }
 
   private deleteList(listId: string): void {
-    const lists = this.db.getData();
-    this.db.setData(lists.filter((list) => list.id !== listId));
-    this.updateLists();
+    try {
+      const lists = this.db.getData();
+      this.db.setData(lists.filter((list) => list.id !== listId));
+      this.updateLists();
+
+      this.log(LogLevel.INFO, `List deleted: ${listId}`);
+    } catch (error) {
+      this.log(LogLevel.ERROR, `Failed to delete list: ${error}`);
+    }
   }
 
   private renameList(listId: string, name: string): void {
-    const lists = this.db.getData();
-    const updatedLists = lists.map((list) => {
-      if (list.id === listId) {
-        list.name = name;
+    try {
+      const lists = this.db.getData();
+      const updatedLists = lists.map((list) => {
+        if (list.id === listId) {
+          list.name = name;
+          return list;
+        }
         return list;
-      }
-      return list;
-    });
-    this.db.setData(updatedLists);
-    this.updateLists();
+      });
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      this.log(LogLevel.INFO, `List renamed: ${listId}`);
+    } catch (error) {
+      this.log(LogLevel.ERROR, `Failed to rename list: ${error}`);
+    }
   }
 }
 
