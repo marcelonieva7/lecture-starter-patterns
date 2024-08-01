@@ -2,14 +2,14 @@ import { Server, Socket } from "socket.io";
 
 import { ListEvent } from "../common/enums/enums";
 import { Database } from "../data/database";
-import { ReorderService } from "../services/reorder.service";
-import { LogPublisher } from "../services/logger/loggerPublisher";
+import { type LogPublisher } from "../services/logger/loggerPublisher";
+import { type Reorder } from "../services/reorder/types";
 import { type LogLevel } from "../common/types/types";
 
 abstract class SocketHandler {
   protected db: Database;
 
-  protected reorderService: ReorderService;
+  protected reorderService: Reorder;
 
   protected io: Server;
 
@@ -18,7 +18,7 @@ abstract class SocketHandler {
   public constructor(
     io: Server,
     db: Database,
-    reorderService: ReorderService,
+    reorderService: Reorder,
     logPublisher: LogPublisher
   ) {
     this.io = io;

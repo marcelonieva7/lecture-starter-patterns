@@ -4,7 +4,7 @@ import { Server, Socket } from "socket.io";
 import { lists } from "./assets/mock-data";
 import { Database } from "./data/database";
 import { CardHandler, ListHandler } from "./handlers/handlers";
-import { loggerService, ReorderService } from "./services/services";
+import { loggerService, reorderServiceProxy } from "./services/services";
 
 const PORT = 3005;
 
@@ -17,17 +17,16 @@ const io = new Server(httpServer, {
 });
 
 const db = Database.Instance;
-const reorderService = new ReorderService();
 
 if (process.env.NODE_ENV !== "production") {
   db.setData(lists);
 }
 
 const onConnection = (socket: Socket): void => {
-  new ListHandler(io, db, reorderService, loggerService).handleConnection(
+  new ListHandler(io, db, reorderServiceProxy, loggerService).handleConnection(
     socket
   );
-  new CardHandler(io, db, reorderService, loggerService).handleConnection(
+  new CardHandler(io, db, reorderServiceProxy, loggerService).handleConnection(
     socket
   );
 };
