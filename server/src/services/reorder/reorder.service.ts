@@ -1,7 +1,8 @@
-import { Card } from "../data/models/card";
-import { List } from "../data/models/list";
+import { Card } from "../../data/models/card";
+import { List } from "../../data/models/list";
+import { type Reorder } from "./types";
 
-class ReorderService {
+class ReorderService implements Reorder {
   public reorder<T>(items: T[], startIndex: number, endIndex: number): T[] {
     const card = items[startIndex];
     const listWithRemoved = this.remove(items, startIndex);

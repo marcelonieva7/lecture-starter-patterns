@@ -16,7 +16,7 @@ class Card {
     this.id = randomUUID();
   }
 
-  // PATTERN:{Prototype}
+  // PATTERN: Prototype
   public clone(): this {
     const clonedCard = <this>Object.create(this);
     Object.assign(clonedCard, this);

@@ -1,7 +1,7 @@
 import { type LogLevel } from "../../common/types/types";
 import { type Observer, type Logger } from "./types";
 
-// PATTERN:{name of Observer}
+// PATTERN: Observer
 class LogPublisher implements Logger {
   private observers: Observer[] = [];
 
